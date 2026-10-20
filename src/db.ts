@@ -1,19 +1,20 @@
-import { PrismaClient } from './generated/prisma/client.js'
-
-import { getDatabaseUrl } from './database-url.js'
-
 import { PrismaPg } from '@prisma/adapter-pg'
 
-const adapter = new PrismaPg({
-  connectionString: getDatabaseUrl(),
-})
+import { PrismaClient } from './generated/prisma/client.js'
+import { getDatabaseUrl } from './database-url.js'
 
-declare global {
-  var __prisma: PrismaClient | undefined
-}
-
-export const prisma = globalThis.__prisma || new PrismaClient({ adapter })
-
-if (process.env.NODE_ENV !== 'production') {
-  globalThis.__prisma = prisma
+/**
+ * Workers cannot reuse I/O objects across requests, so open a client per call
+ * and disconnect when done.
+ */
+export async function withDb<T>(
+  fn: (db: PrismaClient) => Promise<T>,
+): Promise<T> {
+  const adapter = new PrismaPg({ connectionString: getDatabaseUrl() })
+  const db = new PrismaClient({ adapter })
+  try {
+    return await fn(db)
+  } finally {
+    await db.$disconnect()
+  }
 }
