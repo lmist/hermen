@@ -1,5 +1,6 @@
 import type { Intake, PersonaId } from '#/lib/hermen'
 import { NOT_A_THERAPIST } from '#/lib/hermen'
+import { MicButton, SpeakingBar } from '#/components/voice/voice-controls'
 import { CrisisPanel } from './crisis-lines'
 import { PrepCardView } from './prep-card'
 import { useComposer, usePrepChat } from './use-prep-chat'
@@ -39,6 +40,8 @@ export function PrepChat({ persona, intake }: { persona: PersonaId; intake: Inta
 
         {chat.crisis ? <CrisisPanel /> : null}
 
+        <SpeakingBar />
+
         <form {...composer.formProps} className="grid gap-3">
           <label htmlFor="composer" className="sr-only">
             Message {chat.persona.name}
@@ -47,7 +50,7 @@ export function PrepChat({ persona, intake }: { persona: PersonaId; intake: Inta
             id="composer"
             {...composer.textareaProps}
             rows={3}
-            placeholder="Say it messy. However it comes out is fine."
+            placeholder={composer.mic.listening ? 'Listening…' : 'Say it messy. However it comes out is fine.'}
             aria-describedby="composer-hint"
             className={`w-full resize-y rounded-[14px] border border-border bg-card p-3 text-[16px] text-foreground placeholder:text-muted-foreground ${focus}`}
           />
@@ -65,6 +68,7 @@ export function PrepChat({ persona, intake }: { persona: PersonaId; intake: Inta
                 Send
               </button>
             )}
+            <MicButton mic={composer.mic} />
             <button
               {...chat.threeWaysProps}
               className={`os-pill text-[13px] disabled:cursor-not-allowed disabled:opacity-50 ${focus}`}
@@ -78,6 +82,14 @@ export function PrepChat({ persona, intake }: { persona: PersonaId; intake: Inta
               Enter sends · Shift+Enter new line
             </span>
           </div>
+          <p aria-live="polite" className="sr-only">
+            {composer.mic.statusText}
+          </p>
+          {composer.mic.error ? (
+            <p role="alert" className="m-0 text-[14px] text-destructive">
+              {composer.mic.error}
+            </p>
+          ) : null}
           {chat.cardError ? (
             <p role="alert" className="m-0 text-[14px] text-destructive">
               {chat.cardError}

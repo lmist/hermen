@@ -6,6 +6,9 @@ import type { UIMessage } from '@tanstack/ai-react'
 import { PERSONAS, THREE_WAYS_REQUEST, detectCrisis } from '#/lib/hermen'
 import type { Intake, PersonaId, PrepCard } from '#/lib/hermen'
 import { flagCrisis, prepStore, setCard } from '#/lib/store/prep'
+import { voiceStore } from '#/lib/store/voice'
+import { speakReply, stopVoice, unlockAudio } from '#/components/voice/player'
+import { useSpeechInput } from '#/components/voice/use-speech-input'
 
 export interface ChatBubble {
   id: string
@@ -46,9 +49,15 @@ function prefersReducedMotion() {
  */
 export function usePrepChat(persona: PersonaId, intake: Intake) {
   const p = PERSONAS[persona]
+  /** Set when the person presses Stop, so a cut-off reply is not read aloud. */
+  const stoppedRef = useRef(false)
   const chat = useChat({
     connection: fetchServerSentEvents(chatUrl(persona, intake)),
     body: { persona, intake },
+    onFinish: (message) => {
+      if (stoppedRef.current || message.role !== 'assistant' || !voiceStore.state.enabled) return
+      void speakReply(persona, bubbleText(message))
+    },
   })
   const crisis = useStore(prepStore, (s) => s.crisis)
   const card = useStore(prepStore, (s) => s.card)
@@ -69,6 +78,9 @@ export function usePrepChat(persona: PersonaId, intake: Intake) {
   const send = (text: string) => {
     const content = text.trim()
     if (!content) return
+    stopVoice()
+    if (voiceStore.state.enabled) unlockAudio()
+    stoppedRef.current = false
     if (detectCrisis(content)) flagCrisis()
     void chat.sendMessage(content)
   }
@@ -94,7 +106,10 @@ export function usePrepChat(persona: PersonaId, intake: Intake) {
     cardRef,
     chatError: chat.error?.message ?? null,
     send,
-    stop: chat.stop,
+    stop: () => {
+      stoppedRef.current = true
+      chat.stop()
+    },
     threeWaysProps: {
       type: 'button' as const,
       disabled: busy || userTurns === 0,
@@ -111,10 +126,33 @@ export function usePrepChat(persona: PersonaId, intake: Intake) {
   }
 }
 
-/** Mechanism for the composer: Enter sends, Shift+Enter adds a newline. */
+/**
+ * Mechanism for the composer: Enter sends, Shift+Enter adds a newline. The mic (when the browser
+ * has speech recognition) shows the live transcript in the textarea and sends the final one
+ * like a typed message; starting it stops any voice playback.
+ */
 export function useComposer(onSend: (text: string) => void, disabled: boolean) {
   const [value, setValue] = useState('')
-  const canSend = !disabled && value.trim().length > 0
+  const draftRef = useRef('')
+  const join = (spoken: string) => [draftRef.current.trim(), spoken].filter(Boolean).join(' ')
+  const mic = useSpeechInput(
+    {
+      onStart: () => {
+        stopVoice()
+        unlockAudio()
+        draftRef.current = value
+      },
+      onTranscript: (text) => setValue(join(text)),
+      onFinal: (text) => {
+        onSend(join(text))
+        draftRef.current = ''
+        setValue('')
+      },
+      onCancel: () => setValue(draftRef.current),
+    },
+    disabled,
+  )
+  const canSend = !disabled && !mic.listening && value.trim().length > 0
 
   const submit = () => {
     if (!canSend) return
@@ -124,6 +162,7 @@ export function useComposer(onSend: (text: string) => void, disabled: boolean) {
 
   return {
     canSend,
+    mic,
     formProps: {
       onSubmit: (e: React.FormEvent) => {
         e.preventDefault()
@@ -132,6 +171,8 @@ export function useComposer(onSend: (text: string) => void, disabled: boolean) {
     },
     textareaProps: {
       value,
+      readOnly: mic.listening,
+      'aria-busy': mic.listening,
       onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => setValue(e.target.value),
       onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {

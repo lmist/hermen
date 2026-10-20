@@ -5,6 +5,7 @@ import type { Intake, PersonaId } from '#/lib/hermen'
 import { startPrep } from '#/lib/store/prep'
 import { IntakeForm } from '#/components/hermen/intake-form'
 import { PrepChat } from '#/components/hermen/prep-chat'
+import { VoiceNotes, VoiceToggle } from '#/components/voice/voice-controls'
 
 export const Route = createFileRoute('/prep/$persona')({
   beforeLoad: ({ params }) => {
@@ -46,18 +47,24 @@ function PrepFlow({ persona }: { persona: PersonaId }) {
 
   return (
     <main className="mx-auto max-w-[760px] px-4 pt-8 pb-8 sm:px-[22px] sm:pt-12 print:max-w-none print:p-0">
-      <div className="mb-8 flex items-center gap-3 print:hidden">
-        <img src={p.image} alt="" width={48} height={48} className="size-12 rounded-[14px] border border-border object-cover" />
-        <div className="grid min-w-0 gap-0.5">
-          <p className="m-0 text-[15px] tracking-[-0.03em]">Prep with {p.name}</p>
-          <p className="os-meta m-0 truncate">{page.summary || p.tagline}</p>
+      <div className="mb-8 grid gap-3 print:hidden">
+        <div className="flex flex-wrap items-center gap-3">
+          <img src={p.image} alt="" width={48} height={48} className="size-12 rounded-[14px] border border-border object-cover" />
+          <div className="grid min-w-0 gap-0.5">
+            <p className="m-0 text-[15px] tracking-[-0.03em]">Prep with {p.name}</p>
+            <p className="os-meta m-0 truncate">{page.summary || p.tagline}</p>
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <VoiceToggle persona={persona} />
+            <Link
+              to="/"
+              className="os-pill text-[12px] no-underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              Change guide
+            </Link>
+          </div>
         </div>
-        <Link
-          to="/"
-          className="os-pill ml-auto text-[12px] no-underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          Change guide
-        </Link>
+        <VoiceNotes persona={persona} />
       </div>
 
       {page.intake ? (
