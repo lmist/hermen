@@ -1,7 +1,7 @@
-// OWNER: auth agent (bead hermen-wgg.6). Stub; keep the export names and the Me shape.
+// OWNER: auth agent (bead hermen-wgg.6).
 import { createServerFn } from '@tanstack/react-start'
 
-import { authMode } from '#/lib/session'
+import { authMode, getRequestSession } from '#/lib/session'
 import type { AuthMode } from '#/lib/session'
 
 export interface Me {
@@ -11,6 +11,8 @@ export interface Me {
   picture?: string | null
 }
 
-export const getMe = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<Me> => ({ authMode: authMode(), signedIn: false }),
-)
+export const getMe = createServerFn({ method: 'GET' }).handler(async (): Promise<Me> => {
+  const session = await getRequestSession()
+  if (!session) return { authMode: authMode(), signedIn: false }
+  return { authMode: authMode(), signedIn: true, name: session.name, picture: session.picture }
+})
