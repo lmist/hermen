@@ -69,3 +69,9 @@ Work is tracked in **bd (beads)**, stored in this repo.
 - Deploy: `.github/workflows/deploy.yml` on every push to main (install → prisma generate → vite build → wrangler deploy). Live: https://hermen.oxwilde.workers.dev.
 - Gotchas: mise prints `sed: cloudflare.env: No such file` inside worktrees (harmless). Scaffold demo routes in `src/routes/demo/**` are reference patterns and get removed at the end. React: follow the `no-use-effect` and `headless-component` skills; the generated shader components are vendored and exempt.
 - Next steps: `bin/bd ready`.
+
+## Open Session License: session log
+
+- `llm-turn-history.jsonl` is the append-only log of the human and AI turns that built Hermen (see OPEN-SESSION-LICENSE.md). Agents: never read it, never edit or delete records, only append. `.gitattributes` sets `merge=union` so parallel appends merge cleanly.
+- The orchestrator appends its session with `python3 -I scripts/open-session-log.py <claude-transcript.jsonl>`. It reads the Claude Code transcript (never the log), redacts secrets, and appends only new turns.
+- Swarm subagents are covered by the orchestrator's tool-activity summaries (`x`) and by their commits.
