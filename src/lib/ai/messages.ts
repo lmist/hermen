@@ -67,3 +67,9 @@ export function json(body: unknown, status = 200) {
     headers: { 'Content-Type': 'application/json' },
   })
 }
+
+/** Anthropic client config. Keys not scoped to a workspace need ANTHROPIC_WORKSPACE_ID sent as a header. */
+export function anthropicConfig() {
+  const workspaceId = process.env.ANTHROPIC_WORKSPACE_ID
+  return workspaceId ? { defaultHeaders: { 'anthropic-workspace-id': workspaceId } } : {}
+}

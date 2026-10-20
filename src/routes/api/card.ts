@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { chat } from '@tanstack/ai'
 import { anthropicText } from '@tanstack/ai-anthropic'
 import { prepCardSchema, systemPrompt } from '#/lib/hermen'
-import { json, normalizeMessages, readContext } from '#/lib/ai/messages'
+import { anthropicConfig, json, normalizeMessages, readContext } from '#/lib/ai/messages'
 
 export const Route = createFileRoute('/api/card')({
   server: {
@@ -16,7 +16,7 @@ export const Route = createFileRoute('/api/card')({
           if (!messages.length) return json({ error: 'No messages' }, 400)
 
           const card = await chat({
-            adapter: anthropicText('claude-sonnet-5-5'),
+            adapter: anthropicText('claude-sonnet-5-5', anthropicConfig()),
             systemPrompts: [systemPrompt(persona, 'card', intake)],
             messages: [
               ...messages,
@@ -26,7 +26,8 @@ export const Route = createFileRoute('/api/card')({
             modelOptions: { max_tokens: 2000 },
           })
           return json({ card })
-        } catch {
+        } catch (error: any) {
+          console.error('[api/card]', error?.message ?? error)
           return json({ error: 'Failed to build prep card' }, 502)
         }
       },
