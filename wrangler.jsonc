@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hermen",
+  "account_id": "429c790bd19556259b0a43c239b4988d",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "observability": { "enabled": true },
+  // Secrets (wrangler secret put): ANTHROPIC_API_KEY, DATABASE_URL, SESSION_SECRET,
+  // MASKY_CLIENT_ID, MASKY_CLIENT_SECRET. Never put secrets in vars.
+  "vars": {
+    "AUTH_MODE": "open",
+    "MASKY_BASE": "https://masky.ai"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "projectName": "hermen",
+  "mode": "file-router",
+  "bundler": "vite",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "git": true,
+  "install": true,
+  "intent": true,
+  "addOnOptions": {
+    "prisma": {
+      "database": "postgres"
+    }
+  },
+  "projectPreset": "default",
+  "routerOnly": false,
+  "includeExamples": true,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "ai",
+    "shadcn",
+    "store",
+    "prisma",
+    "tanstack-query",
+    "form",
+    "cloudflare"
+  ]
+}

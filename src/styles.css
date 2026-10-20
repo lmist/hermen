@@ -1,0 +1,213 @@
+/*
+ * Hermen theme. LAW: follows the OpenShaders reference (~/gts/openshaders-scrape/app/app.css).
+ * Dark-first, near-black field, warm off-white ink, 1px hairlines, pill buttons, 22px cards,
+ * SF Pro with tight tracking. Use the tokens through Tailwind utilities (bg-background,
+ * text-muted-foreground, border-border, rounded-xl …) and the .os-* helpers below.
+ * Do not add new colours or fonts.
+ */
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Dark is the default (OpenShaders is dark-first). */
+:root,
+.dark {
+  --background: #0c0c0c;
+  --foreground: #f2efe8;
+  --card: #101010;
+  --card-foreground: #f2efe8;
+  --popover: #101010;
+  --popover-foreground: #f2efe8;
+  --primary: #f2efe8;
+  --primary-foreground: #111111;
+  --secondary: #161616;
+  --secondary-foreground: #f2efe8;
+  --muted: #161616;
+  --muted-foreground: #8d8982;
+  --accent: #1b1b1b;
+  --accent-foreground: #f2efe8;
+  --destructive: #d15c4a;
+  --destructive-foreground: #f2efe8;
+  --border: #262626;
+  --input: #262626;
+  --ring: #8d8982;
+  --radius: 14px;
+  /* Pass to the shader components: background={{ dark: '#0c0c0c', light: '#f4f1ea' }} */
+  --shader-bg: #0c0c0c;
+  color-scheme: dark;
+}
+
+.light,
+html[data-theme='light'] {
+  --background: #f4f1ea;
+  --foreground: #161513;
+  --card: #fffdf8;
+  --card-foreground: #161513;
+  --popover: #fffdf8;
+  --popover-foreground: #161513;
+  --primary: #161513;
+  --primary-foreground: #f4f1ea;
+  --secondary: #ebe7de;
+  --secondary-foreground: #161513;
+  --muted: #ebe7de;
+  --muted-foreground: #6b6760;
+  --accent: #e7e2d7;
+  --accent-foreground: #161513;
+  --destructive: #c4513f;
+  --destructive-foreground: #fffdf8;
+  --border: #ddd8ce;
+  --input: #ddd8ce;
+  --ring: #6b6760;
+  --shader-bg: #f4f1ea;
+  color-scheme: light;
+}
+
+@theme inline {
+  --font-sans: 'SF Pro Display', 'SF Pro Text', -apple-system, 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'SF Mono', ui-monospace, Menlo, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 6px); /* 8px: inputs, menu items */
+  --radius-md: calc(var(--radius) - 2px); /* 12px: menus */
+  --radius-lg: var(--radius); /* 14px: tiles */
+  --radius-xl: calc(var(--radius) + 8px); /* 22px: cards */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html,
+  body,
+  #app {
+    min-height: 100%;
+  }
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 520;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Wordmark: "hermen" in the top bar. */
+  .os-brand {
+    font-weight: 560;
+    letter-spacing: -0.06em;
+    font-size: 22px;
+  }
+  /* Small muted line above a heading. */
+  .os-kicker {
+    color: var(--muted-foreground);
+    font-size: 13px;
+  }
+  /* Mono metadata (timestamps, counts, labels). */
+  .os-meta {
+    color: var(--muted-foreground);
+    font-size: 12px;
+    font-family: var(--font-mono);
+  }
+  /* Pill button / chip with a hairline border. */
+  .os-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--foreground);
+    background: transparent;
+    cursor: pointer;
+  }
+  .os-pill:hover {
+    background: rgb(127 127 127 / 14%);
+  }
+  /* Solid pill (primary action). */
+  .os-pill-solid {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .os-pill-solid:hover {
+    background: var(--primary);
+    opacity: 0.9;
+  }
+  /* Raised card (portrait + shader cards). */
+  .os-card {
+    background: var(--card);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -40px rgb(0 0 0 / 55%);
+  }
+  /* Hairline tile (lists, saved cards, chat options). */
+  .os-tile {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 14px 12px;
+  }
+  .os-tile:hover {
+    background: rgb(127 127 127 / 8%);
+  }
+  /* Big underlined input, like the OpenShaders claim field. */
+  .os-field {
+    border: 0;
+    border-bottom: 1px solid var(--foreground);
+    background: transparent;
+    color: var(--foreground);
+    padding: 8px 0;
+    font-size: 28px;
+    letter-spacing: -0.04em;
+    outline: none;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff;
+    color: #111111;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
