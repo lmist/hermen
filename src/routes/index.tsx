@@ -1,86 +1,66 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { NOT_A_THERAPIST, PERSONA_IDS } from '#/lib/hermen'
+import { CrisisLines } from '#/components/hermen/crisis-lines'
+import { PersonaCard } from '#/components/hermen/persona-card'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({ component: Landing })
 
-function App() {
+const STEPS: ReadonlyArray<[string, string]> = [
+  ['Pick your guide', 'Hermen or Herma. Same brain, same rules, different face and voice.'],
+  ['Say it messy', 'However it comes out is fine. One gentle question at a time.'],
+  ['"Here\'s what I heard"', 'Your words come back to you, with one phrase a therapist could read two ways. You correct it.'],
+  ['Say it three ways', 'The hardest thing, written plain, gentle, and with an example.'],
+  ['Take your prep card', 'One page to bring to your session. Print it, copy it, or keep it on your phone.'],
+]
+
+function Landing() {
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(79,184,178,0.32),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(47,106,74,0.18),transparent_66%)]" />
-        <p className="island-kicker mb-3">TanStack Start Base Template</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Start simple, ship quickly.
+    <main className="mx-auto max-w-[1100px] px-4 pt-10 pb-8 sm:px-[22px] sm:pt-14">
+      <section aria-labelledby="hero-title" className="grid gap-5">
+        <p className="os-kicker m-0">AI Workforce 2026 · therapy prep</p>
+        <h1 id="hero-title" className="m-0 text-[clamp(36px,6vw,64px)]">
+          Get ready to be understood.
         </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          This base starter intentionally keeps things light: two routes, clean
-          structure, and the essentials you need to build from scratch.
+        <p className="m-0 max-w-[640px] text-[17px] leading-relaxed text-muted-foreground">
+          Hermeneutics is the study of how people understand each other: the gap between what you say and what
+          the other person hears. Therapy is where that gap hurts most. Hermen helps you find your words before the
+          session, checks that they carry what you mean, and gives you a one-page card to bring.
         </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/about"
-            className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
-          >
-            About This Starter
-          </a>
-          <a
-            href="https://tanstack.com/router"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
-          >
-            Router Guide
-          </a>
-        </div>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [
-            'Type-Safe Routing',
-            'Routes and links stay in sync across every page.',
-          ],
-          [
-            'Server Functions',
-            'Call server code from your UI without creating API boilerplate.',
-          ],
-          [
-            'Streaming by Default',
-            'Ship progressively rendered responses for faster experiences.',
-          ],
-          [
-            'Tailwind Native',
-            'Design quickly with utility-first styling and reusable tokens.',
-          ],
-        ].map(([title, desc], index) => (
-          <article
-            key={title}
-            className="island-shell feature-card rise-in rounded-2xl p-5"
-            style={{ animationDelay: `${index * 90 + 80}ms` }}
-          >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
-          </article>
+      <section aria-label="Choose your guide" className="mt-12 grid gap-8 sm:grid-cols-2 sm:gap-6">
+        {PERSONA_IDS.map((id) => (
+          <PersonaCard key={id} persona={id} />
         ))}
       </section>
 
-      <section className="island-shell mt-8 rounded-2xl p-6">
-        <p className="island-kicker mb-2">Quick Start</p>
-        <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-          <li>
-            Edit <code>src/routes/index.tsx</code> to customize the home page.
-          </li>
-          <li>
-            Update <code>src/components/Header.tsx</code> and{' '}
-            <code>src/components/Footer.tsx</code> for brand links.
-          </li>
-          <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{' '}
-            <code>src/styles.css</code>.
-          </li>
-        </ul>
+      <section aria-labelledby="steps-title" className="mt-16 grid gap-4">
+        <p className="os-kicker m-0">About 10 minutes</p>
+        <h2 id="steps-title" className="m-0 text-[clamp(26px,3.4vw,38px)]">
+          How a prep goes
+        </h2>
+        <ol className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-5">
+          {STEPS.map(([title, body], i) => (
+            <li key={title} className="os-tile grid content-start gap-1">
+              <span className="os-meta">{String(i + 1).padStart(2, '0')}</span>
+              <span className="text-[15px] tracking-[-0.03em]">{title}</span>
+              <span className="text-[13px] text-muted-foreground">{body}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="safety-title" className="os-tile mt-10 grid gap-4 p-5 hover:bg-transparent">
+        <div className="grid gap-1">
+          <h2 id="safety-title" className="m-0 text-xl">
+            {NOT_A_THERAPIST}
+          </h2>
+          <p className="m-0 text-[14px] text-muted-foreground">
+            Hermen helps you prepare for real therapy; it does not replace it. We don't save your conversation: it
+            lives in this tab. If you are in crisis, please reach out now:
+          </p>
+        </div>
+        <CrisisLines />
       </section>
     </main>
   )
