@@ -46,9 +46,9 @@ export function PersonaCard({ persona }: { persona: PersonaId }) {
         <img
           src={card.portrait}
           alt={`Portrait of ${p.name}`}
-          width={112}
-          height={112}
-          className="absolute top-4 left-4 size-24 rounded-[14px] border border-border object-cover shadow-[0_30px_80px_-40px_rgb(0_0_0/55%)] sm:size-28"
+          width={140}
+          height={140}
+          className="absolute top-4 left-4 size-30 rounded-[14px] border border-border object-cover shadow-[0_30px_80px_-40px_rgb(0_0_0/55%)] sm:size-35"
         />
         <div className="absolute right-4 bottom-4 left-4 grid gap-1">
           <h2 id={`${p.id}-name`} className="m-0 text-3xl dark:[text-shadow:0_1px_12px_rgb(0_0_0/40%)]">
