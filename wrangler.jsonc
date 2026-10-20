@@ -10,6 +10,8 @@
   "routes": [{ "pattern": "hermeneutic.live", "custom_domain": true }],
   // Secrets (wrangler secret put): ANTHROPIC_API_KEY, DATABASE_URL, SESSION_SECRET,
   // MASKY_CLIENT_ID, MASKY_CLIENT_SECRET. Never put secrets in vars.
+  // Voice mode: max 30 /api/speak calls per minute per signed-in user.
+  "ratelimits": [{ "name": "SPEAK_LIMITER", "namespace_id": "1001", "simple": { "limit": 30, "period": 60 } }],
   "vars": {
     "AUTH_MODE": "open",
     "MASKY_BASE": "https://masky.ai"
