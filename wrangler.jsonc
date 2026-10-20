@@ -6,6 +6,8 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   "observability": { "enabled": true },
+  "workers_dev": true,
+  "routes": [{ "pattern": "hermeneutic.live", "custom_domain": true }],
   // Secrets (wrangler secret put): ANTHROPIC_API_KEY, DATABASE_URL, SESSION_SECRET,
   // MASKY_CLIENT_ID, MASKY_CLIENT_SECRET. Never put secrets in vars.
   "vars": {
