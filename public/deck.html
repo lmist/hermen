@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermen: Get ready to be understood</title>
+<meta name="description" content="Hermen helps you get ready for therapy. Two Masky avatars help you find your words first.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--stone:#F4EFE6;--ink:#2B2622;--terra:#B5583A;--sage:#7A8B6F;--card:#FBF8F2;--line:#DDD3C3;--muted:#5E544B}
+*{box-sizing:border-box}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+body{margin:0;background:var(--stone);color:var(--ink);font:clamp(17px,1.5vw,22px)/1.6 Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.1;margin:0 0 .5em}
+h1{font-size:clamp(4rem,14vw,10rem);letter-spacing:-.03em;margin:0}
+h2{font-size:clamp(2rem,5vw,4rem);letter-spacing:-.02em}
+h3{font-size:1.3em}
+section{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;padding:8vh max(6vw,1.25rem)}
+.wrap{max-width:1100px;width:100%;margin:0 auto}
+.eyebrow{color:var(--terra);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.7em;margin-bottom:1.2em}
+.tag{font:italic 400 clamp(1.6rem,4vw,3rem)/1.2 Fraunces,Georgia,serif;color:var(--terra);margin:.3em 0 1em}
+.lead{max-width:40em;color:var(--muted)}
+a{color:var(--terra)}
+ul{padding-left:1.1em;max-width:42em}li{margin:.5em 0}li::marker{color:var(--terra)}
+.alt{background:#EBE4D6}
+.dark{background:var(--ink);color:var(--stone)}
+.dark .eyebrow{color:#E0997F}
+blockquote{margin:0;font:italic 400 clamp(1.5rem,3.2vw,2.6rem)/1.35 Fraunces,Georgia,serif;max-width:26em;border-left:4px solid var(--terra);padding-left:1.2em}
+blockquote cite{display:block;font:500 .5em Inter,sans-serif;font-style:normal;margin-top:1.2em;color:#E0997F;letter-spacing:.1em;text-transform:uppercase}
+.example{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.2em 1.5em;max-width:40em;margin-top:1.5em}
+.grid{display:grid;gap:1.5rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.steps{counter-reset:s;list-style:none;padding:0;max-width:none}
+.steps li{counter-increment:s;position:relative;padding-left:2.6em;margin:.9em 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.8em;height:1.8em;border-radius:50%;background:var(--terra);color:#fff;font-weight:600;font-size:.85em;display:grid;place-items:center}
+.steps b{display:block}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1.6em;box-shadow:0 14px 40px rgba(43,38,34,.12);font-size:.82em;transform:rotate(.6deg)}
+.pcard h4{font:600 .72em Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin:1.3em 0 .3em}
+.pcard p{margin:0}
+.pcard ol{margin:0;padding-left:1.2em}
+.pcard .t{font:600 1.4em Fraunces,serif;border-bottom:2px solid var(--sage);padding-bottom:.4em;margin-bottom:1em}
+.persona{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.6em}
+.pic{width:140px;height:140px;border-radius:50%;background:var(--sage);color:#fff;display:grid;place-items:center;font:600 4rem Fraunces,serif;overflow:hidden;margin-bottom:1em}
+.pic.h{background:var(--terra)}
+.pic img{width:100%;height:100%;object-fit:cover}
+.intro{margin-top:1em}.intro iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000}
+.intro span{display:block;font-size:.8em;color:var(--muted);margin-bottom:.4em}
+.crisis{background:var(--card);border-left:4px solid var(--sage);padding:1em 1.4em;border-radius:0 12px 12px 0;max-width:42em}
+.pill{display:inline-block;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:.3em .9em;margin:.25em .15em;font-size:.9em}
+.ok h3{color:var(--sage)}.next h3{color:var(--terra)}
+.btns a{display:inline-block;margin:.4em .6em .4em 0;padding:.8em 1.6em;border-radius:99px;border:2px solid var(--terra);text-decoration:none;font-weight:600}
+.btns a.p{background:var(--terra);color:#fff}
+footer{padding:2.5rem max(6vw,1.25rem);text-align:center;font-size:.85em;color:var(--muted);border-top:1px solid var(--line)}
+@media print{html{scroll-snap-type:none}section{min-height:0;break-inside:avoid;padding:1.5cm 0}.dark{background:#fff;color:#000}.pcard{box-shadow:none;transform:none}body{font-size:12pt}h1{font-size:60pt}}
+</style>
+</head>
+<body>
+
+<section id="title"><div class="wrap">
+<div class="eyebrow">AI Workforce Hackathon 2026</div>
+<h1>Hermen</h1>
+<p class="tag">Get ready to be understood.</p>
+<p class="lead">Hermen helps you get ready for therapy. Talk it through first, in private, with a Masky avatar guide. Then say what you mean in the room, and check that your therapist heard it.</p>
+</div></section>
+
+<section id="problem" class="alt"><div class="wrap">
+<div class="eyebrow">The problem</div>
+<h2>Therapy's overlooked barrier is being misunderstood.</h2>
+<p class="lead">Therapy is hard to start: cost, finding someone, stigma, time. One reason gets missed: being misunderstood, and the fear of it.</p>
+<div class="grid g2">
+<div>
+<h3>Hermeneutics, in plain words</h3>
+<p>The study of how people understand each other: the gap between what one person says and what the other hears. The word comes from Hermes, the Greek messenger god who carried words between gods and humans. Something could get lost on the way.</p>
+</div>
+<div>
+<h3>Where that gap hurts most</h3>
+<ul>
+<li>You arrive vulnerable, to sit with a stranger.</li>
+<li>You are on a clock: about 50 minutes.</li>
+<li>You are saying things you may never have said out loud.</li>
+<li>Vulnerable, we lose our words. We say something close, but not quite it.</li>
+</ul></div></div>
+<div class="example"><b>"I'm just tired of everything."</b><br>Burned out at work? Done with a relationship? Something darker? Each reading leads to a very different session, and you may never learn which one your therapist heard.</div>
+</div></section>
+
+<section id="quote" class="dark"><div class="wrap">
+<div class="eyebrow">Why we built it</div>
+<blockquote>"Before I went to therapy, I did a lot of work on voicing what was going on with me. It had a great impact on how I could talk with my therapist. I would even phrase the same thing in different ways, to see if my therapist was understanding me."<cite>The founder</cite></blockquote>
+</div></section>
+
+<section id="what"><div class="wrap">
+<div class="eyebrow">What Hermen does</div>
+<h2>One session, about 10 minutes.</h2>
+<div class="grid g2">
+<ol class="steps">
+<li><b>Pick your guide</b>Hermen or Herma. Sign in with Masky as an avatar: no real name, no email.</li>
+<li><b>Say it messy</b>However it comes out is fine. One gentle question at a time.</li>
+<li><b>"Here's what I heard"</b>Your guide reflects it back and flags words a therapist could misread. You correct it. Say, reflect, correct.</li>
+<li><b>Say it three ways</b>Plain, gentle, and with an example, for the hardest thing.</li>
+<li><b>Take your prep card</b>One page to print, copy, or keep on your phone.</li>
+</ol>
+<div class="pcard" aria-label="Example prep card">
+<div class="t">My prep card</div>
+<h4 style="margin-top:0">What I most want my therapist to understand</h4>
+<p>I'm not just stressed. I feel flat and worn out most days, and it's been months.</p>
+<h4>The hardest thing, three ways</h4>
+<ol><li>I think I'm more than tired. I think I'm low.</li><li>It's hard to explain, but everything feels heavy lately.</li><li>Last Sunday I cancelled plans I'd been looking forward to, and felt nothing.</li></ol>
+<h4>Words I use that might be misread</h4>
+<p>"Tired of everything" means worn out and flat. It does not mean I want to hurt myself.</p>
+<h4>What I want from this session</h4>
+<p>Just be heard first, then work toward a plan.</p>
+<h4>Check-back question</h4>
+<p>"Can you tell me what you heard?"</p>
+</div></div>
+</div></section>
+
+<section id="meet" class="alt"><div class="wrap">
+<div class="eyebrow">Meet your guides</div>
+<h2>Hermen and Herma.</h2>
+<p class="lead">Same brain, same rules, different face and voice. You pick who you would rather open up to. Plain words, short replies, one question at a time. They never diagnose, and they always point you back to your human therapist.</p>
+<div class="grid g2">
+<div class="persona" data-p="hermen">
+<div class="pic h"><img src="/avatars/hermen.jpg" alt="Hermen, a kind man about 40 in an oatmeal sweater" onerror="this.replaceWith('H')"></div>
+<h3>Hermen</h3>
+<p>From <i>Hermes</i> and <i>hermeneutics</i>: the messenger, the interpreter. A friend who listens well. Not a doctor.</p>
+<div class="intro"></div>
+</div>
+<div class="persona" data-p="herma">
+<div class="pic"><img src="/avatars/herma.jpg" alt="Herma, a warm woman about 40 in a sage cardigan" onerror="this.replaceWith('H')"></div>
+<h3>Herma</h3>
+<p>A <i>herma</i> was a stone marker at Greek crossroads and doorways, a guardian of thresholds. She waits with you outside the therapy door.</p>
+<div class="intro"></div>
+</div></div>
+</div></section>
+
+<section id="safety"><div class="wrap">
+<div class="eyebrow">Safety and privacy</div>
+<h2>Non-negotiable.</h2>
+<ul>
+<li><b>Hermen is not a therapist and is not for emergencies.</b> It says so on every screen.</li>
+<li>If you mention suicide, self-harm, or danger, Hermen stops the exercise, says why kindly, and shows crisis lines. This is hard-coded in the page. The AI does not get to decide it.</li>
+<li><b>We don't save your conversation.</b> It lives in your browser tab. Close the tab and it's gone.</li>
+<li><b>Saving is your choice.</b> Only a prep card is stored, never the chat, under your Masky avatar. Delete it anytime.</li>
+<li>You sign in as an avatar, so we never learn your real name or email.</li>
+</ul>
+<div class="crisis"><b>In crisis?</b> 988 (US) &middot; 116 123 Samaritans (UK and Ireland) &middot; <a href="https://findahelpline.com">findahelpline.com</a> (anywhere) &middot; or your local emergency number.</div>
+</div></section>
+
+<section id="why" class="alt"><div class="wrap">
+<div class="eyebrow">Why it matters</div>
+<h2>Built for the judging criteria.</h2>
+<div class="grid g2">
+<div class="persona"><h3>Mental health and wellbeing</h3><p>It is the whole product.</p></div>
+<div class="persona"><h3>Helping communities flourish</h3><p>People in therapy, starting therapy, or on a waitlist. Every expensive therapy hour counts for more, and people with no one safe to practice with get somewhere to start.</p></div>
+<div class="persona"><h3>Agent autonomy</h3><p>Hermen and Herma run every prep session end to end, with no human in the loop. A swarm of AI agents also built, documented, and shipped this product, coordinating through beads and pushing to main.</p></div>
+<div class="persona"><h3>Honest working demo</h3><p>Small, works end to end, and says plainly what it doesn't do.</p></div>
+</div>
+</div></section>
+
+<section id="built"><div class="wrap">
+<div class="eyebrow">How it's built</div>
+<h2>Small stack, shipped on every push.</h2>
+<p><span class="pill">TanStack Start</span><span class="pill">Router</span><span class="pill">Query</span><span class="pill">Form</span><span class="pill">Store</span><span class="pill">DB</span><span class="pill">AI</span><span class="pill">TanStack CLI + Intent</span></p>
+<p class="lead">TanStack CLI and Intent handled scaffolding and agent skills.</p>
+<p><span class="pill">Cloudflare Workers</span><span class="pill">Prisma Postgres</span><span class="pill">Masky avatars</span><span class="pill">Login with Masky</span><span class="pill">GitHub Actions deploy on every push to main</span></p>
+</div></section>
+
+<section id="status" class="alt"><div class="wrap">
+<div class="eyebrow">Honest status</div>
+<h2>What works, and what's next.</h2>
+<div class="grid g2">
+<div class="persona ok"><h3>Works today</h3><ul><li>Pick Hermen or Herma</li><li>Say it messy, get "here's what I heard"</li><li>Flags for phrases that could be misread</li><li>Say it three ways</li><li>A printable one-page prep card</li><li>Hard-coded crisis lines</li></ul></div>
+<div class="persona next"><h3>Next</h3><ul><li>After-session check-in: "did they hear you?"</li><li>Read your card aloud in Hermen's voice</li><li>More languages</li></ul></div>
+</div>
+</div></section>
+
+<section id="links"><div class="wrap">
+<div class="eyebrow">Try it</div>
+<h2>Get ready to be understood.</h2>
+<div class="btns"><a class="p" href="/">Try Hermen</a><a href="https://github.com/lmist/hermen">GitHub</a><a href="https://masky.ai/blog/2026-10-14-ai-workforce-hackathon/">The hackathon</a></div>
+</div></section>
+
+<footer>Hermen is not a therapist and is not for emergencies.</footer>
+
+<script>
+fetch('/avatars.json').then(function(r){return r.ok?r.json():{}}).then(function(d){
+  document.querySelectorAll('[data-p]').forEach(function(el){
+    var k=el.dataset.p,p=d&&(d[k]||(d.personas&&d.personas[k])),u=p&&p.introLiveUrl;
+    if(u){var n=k[0].toUpperCase()+k.slice(1);
+      el.querySelector('.intro').innerHTML='<span>Hear '+n+' say hello</span><iframe allow="autoplay;fullscreen" loading="lazy" title="'+n+' intro"></iframe>';
+      el.querySelector('iframe').src=u;}
+  });
+}).catch(function(){});
+</script>
+</body>
+</html>
