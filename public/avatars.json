@@ -1,0 +1,36 @@
+{
+  "hermen": {
+    "name": "Hermen",
+    "avatarId": "9De1RcNsQcDxwrDNuh2r",
+    "avatarOwnerUserId": "RqOkbuj2QgOPHPTHnCu4qCRfGyP2",
+    "voiceId": "voice_45d54bcdfa0e93206cfd9e3270ed9faccd5d2d0704648b419a9cadd753ad8100",
+    "imageUrl": "/avatars/hermen.jpg",
+    "maskyImageUrl": "https://firebasestorage.googleapis.com/v0/b/maskydotnet.firebasestorage.app/o/userData%2FRqOkbuj2QgOPHPTHnCu4qCRfGyP2%2Fimages%2Fimg_1792458124904_db3f76f2.jpeg?alt=media&token=c5a31d63083b3d7aa4e236bdfb2fa9d0",
+    "introLiveUrl": "https://masky.ai/live/c-26-10-dq1b",
+    "introTurns": [
+      {
+        "liveUrl": "https://masky.ai/live/t-26-10-gukl",
+        "shareUrl": "https://masky.ai/t-26-10-gukl"
+      },
+      {
+        "liveUrl": "https://masky.ai/live/t-26-10-3rd0",
+        "shareUrl": "https://masky.ai/t-26-10-3rd0"
+      }
+    ]
+  },
+  "herma": {
+    "name": "Herma",
+    "avatarId": "MtDW296iexHn2H8FVLwV",
+    "avatarOwnerUserId": "RqOkbuj2QgOPHPTHnCu4qCRfGyP2",
+    "voiceId": "voice_33bd713fff1160b2f59404f07829d699f59d623e8965440b766a17ff3c3e9e75",
+    "imageUrl": "/avatars/herma.jpg",
+    "maskyImageUrl": "https://firebasestorage.googleapis.com/v0/b/maskydotnet.firebasestorage.app/o/userData%2FRqOkbuj2QgOPHPTHnCu4qCRfGyP2%2Fimages%2Fimg_1792458132402_11b3a845.jpeg?alt=media&token=a4788a559f49ebc624f823d9e0850d47",
+    "introLiveUrl": "https://masky.ai/live/c-26-10-dc1f",
+    "introTurns": [
+      {
+        "liveUrl": "https://masky.ai/live/t-26-10-4p8f",
+        "shareUrl": "https://masky.ai/t-26-10-4p8f"
+      }
+    ]
+  }
+}
