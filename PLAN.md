@@ -59,8 +59,8 @@ answer. Preparing with an AI *before* real therapy is.
 
 ## What Hermen does: one session, about 10 minutes
 
-1. **Pick your guide: Hermen or Herma.** Sign in with Masky (a click or two) as an
-   avatar. No real name, no email.
+1. **Pick your guide: Hermen or Herma.** No account needed to start. (Sign in with
+   Masky, as an avatar with no real name or email, only to save your card.)
 2. **Say it messy.** "What's been going on? However it comes out is fine." One
    gentle question at a time. No rush, no judgment.
 3. **"Here's what I heard."** Hermen reflects back what it understood, then flags
@@ -129,12 +129,13 @@ Each one greets you with a short talking video on the landing page (made with Ma
 ## The 60-second demo
 
 1. Landing page: Hermen and Herma side by side, each with a talking intro.
-2. Sign in with Masky.
+2. Pick Hermen or Herma (each card plays a short hello on click).
 3. Type something messy: *"idk, I've been tired of everything lately and my sister
    says I'm being dramatic."*
 4. Hermen reflects it back, flags "tired of everything" as easy to misread, and
    asks which reading is closer.
-5. "Say it three ways", then "Make my prep card". A one-page card appears. Print it.
+5. "Say it three ways", then "Make my prep card". A one-page card appears. Print it,
+   or sign in with Masky and save it.
 
 ## Not in v1 (cut for time)
 
@@ -156,138 +157,54 @@ and a **tip button** (Masky credits).
 
 # Part 2: Plumbing (skip this)
 
-> **Stack changed:** TanStack Start (React) on Cloudflare Workers, pnpm, Prisma
-> Postgres, GitHub Actions deploy on every push to main. The "App stack" section in
-> AGENTS.md is the source of truth; the architecture notes below are the first draft.
+**Live:** https://hermeneutic.live (also https://hermen.oxwilde.workers.dev) ·
+**Deck:** https://hermeneutic.live/deck.html · **Repo:** https://github.com/lmist/hermen
 
 ## Requirements tracker
 
-| # | Hackathon requirement | How | Who | Bead |
-|---|---|---|---|---|
-| 1 | Public GitHub repo | github.com/lmist/hermen is already public | done | – |
-| 2 | Masky avatars | Hermen + Herma, created through the Masky API | agent (needs your key) | hermen-wgg.5 |
-| 3 | Deck URL in twitch.tv/aijudge chat | `/deck.html`, a single scrolling page on our domain | agent builds, **you post** | hermen-wgg.8, .9 |
-| 4 | Submission form | masky.ai/blog/2026-10-14-ai-workforce-hackathon/#submissions (resubmitting updates it) | **you** | hermen-wgg.9 |
-| – | Repo conventions | AGENTS.md block copied verbatim, ASD-STE100.md, OPEN-SESSION-LICENSE.md, `hackathon.md` copy, README | agent | hermen-wgg.3 |
-| – | `/sip.html` | Only required if the project is monetized. Hermen is free, so we skip it. | – | – |
+| # | Hackathon requirement | Status |
+|---|---|---|
+| 1 | Public GitHub repo | github.com/lmist/hermen (public) |
+| 2 | Masky avatars | Hermen + Herma, made with the Masky API, with talking intros (click to play) |
+| 3 | Deck URL in the twitch.tv/aijudge chat | Deck is live at /deck.html. **You post the URL.** |
+| 4 | Submission form | masky.ai/blog/2026-10-14-ai-workforce-hackathon/#submissions. **You submit** (resubmitting updates it). |
+| – | Repo conventions | AGENTS.md block, ASD-STE100.md, OPEN-SESSION-LICENSE.md, hackathon.md, README |
+| – | `/sip.html` | Skipped: Hermen is not monetized |
 
-**Deadline:** extended by the organizers (the brief still says 5:30 PM, Oct 19).
-Submit the form early, then resubmit as things go live (resubmitting updates it).
+## Stack
 
-## What I need from you, in order
+- TanStack Start (React 19, SSR) on Cloudflare Workers, custom domain hermeneutic.live.
+  Scaffolded with the TanStack CLI (exact command in AGENTS.md).
+- TanStack Router (file routes), Query (server state), Form (intake), Store (prep state),
+  DB (saved-cards collection), AI (chat stream + structured prep card).
+- Anthropic `claude-sonnet-5-5` through `@tanstack/ai-anthropic`.
+- Prisma 7 on Postgres, with a per-request client (Workers can't share connections).
+- Login with Masky (OAuth code flow, HMAC-signed session cookie). Chat works signed
+  out; saving a card needs sign-in.
+- OpenShaders theme (dark-first), with a generated WebGL shader card per persona.
+- GitHub Actions deploys every push to main.
 
-1. **Masky Creator tier:** https://masky.ai/?membership=true → Creator → coupon
-   `AIWORKFORCE2026`. The free tier allows 1 avatar; we need 2.
-2. **Masky API key:** https://masky.ai/developer → Generate key → put it in `.env`
-   as `MASKY_API_KEY=mky_…` (gitignored).
-3. **Cloudflare** in `.env`: `CLOUDFLARE_API_TOKEN=…` (template "Edit Cloudflare
-   Workers", plus Zone → DNS → Edit and Zone → Workers Routes → Edit for your
-   domain) and `CLOUDFLARE_ACCOUNT_ID=…`.
-4. **Domain name:** it must be a zone on that Cloudflare account. If it isn't active
-   yet, we ship on `hermen.<you>.workers.dev` first.
-5. **Optional:** `ANTHROPIC_API_KEY=…` in `.env` for Claude replies. Without it we
-   use Cloudflare Workers AI (no key needed).
+## Routes
 
-## Architecture
+| Route | What |
+|---|---|
+| `/` | Landing: Hermen and Herma cards (shader, portrait, intro video) |
+| `/prep/$persona` | Intake form, then chat, then prep card |
+| `/cards`, `/cards/$id` | Saved cards (signed in) |
+| `/deck.html` | Hackathon deck |
+| `POST /api/chat` | TanStack AI SSE stream (`?persona=&intake=`) |
+| `POST /api/card` | Structured prep card |
+| `/auth/login`, `/auth/callback`, `/auth/logout` | Login with Masky |
 
-One Cloudflare Worker. No database. Plain HTML/JS, no build step.
+## Safety
 
-```
-browser ── /, /deck.html, /avatars.json ──────► static assets (public/)
-        ── /auth/login, /auth/callback ───────► Login with Masky (OAuth code flow)
-        ── /api/me ───────────────────────────► who is signed in
-        ── /api/chat {persona, mode, messages} ► LLM (Claude if key, else Workers AI)
+- The crisis guard is a regex in `src/lib/hermen/crisis.ts`. It runs in the browser
+  (the crisis panel shows at once) and on the server (it adds the safety rule to the prompt).
+- Chats are never stored. Only cards the user chooses to save, keyed to their
+  pseudonymous Masky `sub`.
 
-Worker secrets: MASKY_CLIENT_ID, MASKY_CLIENT_SECRET, SESSION_SECRET, ANTHROPIC_API_KEY (optional)
-```
+## How it was built
 
-- **History** lives only in `sessionStorage`. The client sends the whole thread each
-  turn; the Worker stores nothing.
-- **Modes:** `chat` (the reflection loop) and `card` (the prep card under fixed
-  headings, shown as a printable panel).
-- **Crisis guard:** a regex on the user's message, in both the page and the Worker.
-  A match shows the hard-coded crisis panel whatever the model says. The system
-  prompt carries the same rule.
-- **LLM:** `claude-sonnet-5-5` when `ANTHROPIC_API_KEY` is set, otherwise
-  `@cf/meta/llama-3.3-70b-instruct-fp8-fast` through the `AI` binding. Short
-  replies (max_tokens 600; card 1200).
-
-## Auth: Login with Masky (the fastest option, and it scores points)
-
-No passwords, no email, no user table. The hackathon asks for it by name, and the
-identity is a pseudonymous avatar, which suits a mental-health app.
-
-1. Register once: `POST https://masky.ai/api/oauth/clients`
-   `{name:"Hermen", redirectDomains:[<domain>, "hermen.<sub>.workers.dev", "localhost"], scopes:["profile"]}`
-   → `mkc_…` / `mks_…` → `wrangler secret put`.
-2. `/auth/login` → state cookie → `https://masky.ai/oauth-authorize.html?client_id&redirect_uri=<origin>/auth/callback&scope=profile&state`.
-3. `/auth/callback` → check state → `POST /api/oauth/token` (code + secret) →
-   `GET /api/oauth/userinfo` → HMAC-signed `hermen_session` cookie
-   `{sub, name, picture, exp}` (HttpOnly, Secure, SameSite=Lax, 7 days).
-4. `/api/chat` requires the cookie when `AUTH_MODE=masky`. **Fallback:**
-   `AUTH_MODE=open` turns the gate off in one line if SSO misbehaves during judging.
-
-## Masky avatars: exact steps
-
-1. Portraits: `POST /api/images/generate` (`aspectRatio: "1:1"`) with the prompts
-   below → `imageUrl`.
-2. Voices: `GET /api/voices` → pick a calm, warm male voice and a calm, warm female voice.
-3. Avatars: `POST /api/avatars {displayName, imageUrl, personalityPrompt, voiceId}`, twice.
-4. Intros: `POST /api/conversations` →
-   `POST /conversations/{id}/turn {mode:"speak", output:"video", userText:<intro>}` →
-   poll `GET /conversations/by-slug/{slug}` (30–60 s) → the turn's `liveUrl`
-   (`/live/t-…`) goes in an iframe on the landing page.
-5. Write `public/avatars.json` (ids, names, imageUrl, intro liveUrl). Voice
-   delivery default: emotion `contentment`, prosody `speed_slow`.
-
-**Portrait prompts**
-
-- *Hermen:* "Photorealistic head-and-shoulders portrait of a kind man about 40 with
-  Mediterranean features, facing the camera, gentle real smile, kind slightly tired
-  eyes, short dark hair greying at the temples, short neat beard, oatmeal knit
-  sweater, small silver wing-shaped pin on the sweater, warm late-afternoon window
-  light, soft plain warm-beige background, shallow depth of field, 85mm, natural
-  skin texture, calm and trustworthy, not a doctor, no text."
-- *Herma:* "Photorealistic head-and-shoulders portrait of a warm woman about 40 with
-  Mediterranean features, facing the camera, attentive kind eyes, soft small smile,
-  dark curly hair loosely tied back with a few loose strands, sage-green cardigan,
-  small gold hoop earrings, small silver wing-shaped pin, warm late-afternoon window
-  light, soft plain warm-beige background, shallow depth of field, 85mm, natural
-  skin texture, calm and trustworthy, not a doctor, no text."
-
-## Repo layout
-
-```
-src/worker.js      routes, auth, LLM call, crisis guard
-src/prompt.js      Hermen/Herma system prompt (chat + card modes)
-public/            index.html, app.js, styles.css, deck.html, avatars.json
-scripts/           masky-avatars.sh, masky-register-app.sh
-wrangler.jsonc  package.json  .env (gitignored)
-README.md  ASD-STE100.md  AGENTS.md  OPEN-SESSION-LICENSE.md  LICENSE  hackathon.md  PLAN.md
-```
-
-## Build order (status lives in beads)
-
-| Step | Bead | Waiting on | ~min |
-|---|---|---|---|
-| Plan | hermen-wgg.1 | – | done |
-| Worker, static site, chat + auth backend | hermen-wgg.2 | – | 8 (running now) |
-| Repo conventions | hermen-wgg.3 | – | 3 (running now) |
-| Chat UI, reflection loop, prep card, crisis panel | hermen-wgg.4 | your approval | 8 |
-| Masky avatars + intro videos | hermen-wgg.5 | Masky key + Creator tier | 5 |
-| Deploy (workers.dev, then your domain) | hermen-wgg.7 | Cloudflare token | 3 |
-| Login with Masky | hermen-wgg.6 | Masky key + domain | 5 |
-| deck.html | hermen-wgg.8 | your approval | 5 |
-| Twitch post + submission | hermen-wgg.9 | you | 2 |
-| Stretch: read card aloud, tip button | hermen-wgg.10 | time | – |
-
-## Risks
-
-- **Deadline:** extended, new time unknown. Submit early with the repo URL; resubmit
-  when the site is live.
-- **Domain not active yet:** ship on workers.dev; attach the domain when the zone is live.
-- **Masky video takes 30–60 s:** pre-render the intros once; chat replies stay text.
-- **Free tier allows only 1 avatar:** redeem Creator before we create Herma.
-- **SSO registration needs a developer key** (`mky_` from /developer, not a
-  device-flow token).
-- **Workers AI is weaker than Claude** at gentle reflection: use Claude if you have a key.
+A swarm of AI agents in separate git worktrees, each owning its own files, all pushing
+to main, tracked in beads (epic `hermen-wgg`). Ownership rules and the laws (no tests,
+OpenShaders theme, production only) are in AGENTS.md.
