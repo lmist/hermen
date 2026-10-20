@@ -7,7 +7,7 @@ import type { PersonaId, PrepCard } from '#/lib/hermen'
 import { cardsCollection } from '#/lib/cards-collection'
 import { getMe } from '#/server/auth'
 
-type SaveState = 'idle' | 'saving' | 'saved' | 'error'
+type SaveState = 'idle' | 'saving' | 'saved' | 'error' | 'signed_out'
 
 /** Mechanism: who is signed in, and the optimistic insert. */
 function useSaveCard(persona: PersonaId, card: PrepCard) {
@@ -26,8 +26,8 @@ function useSaveCard(persona: PersonaId, card: PrepCard) {
       })
       await tx.isPersisted.promise
       setState('saved')
-    } catch {
-      setState('error')
+    } catch (e) {
+      setState(e instanceof Error && e.message === 'signed_out' ? 'signed_out' : 'error')
     }
   }
 
@@ -52,7 +52,7 @@ export function SaveCardButton({
     )
   }
 
-  if (!me?.signedIn) {
+  if (!me?.signedIn || state === 'signed_out') {
     return (
       <span className="inline-flex items-center gap-3">
         <span className="os-meta">Sign in to save</span>
