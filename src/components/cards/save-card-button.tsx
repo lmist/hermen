@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 
 import { SignInButton } from '#/components/auth/sign-in-button'
 import type { PersonaId, PrepCard } from '#/lib/hermen'
-import { cardsCollection } from '#/lib/cards-collection'
 import { getMe } from '#/server/auth'
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error' | 'signed_out'
@@ -17,6 +16,10 @@ function useSaveCard(persona: PersonaId, card: PrepCard) {
   const save = async () => {
     setState('saving')
     try {
+      // Load TanStack DB on click, in the browser. Its query engine draws random numbers
+      // as it loads, which Cloudflare Workers forbid during server rendering (it broke SSR
+      // of /prep when imported statically).
+      const { cardsCollection } = await import('#/lib/cards-collection')
       const tx = cardsCollection.insert({
         id: crypto.randomUUID(),
         persona,
