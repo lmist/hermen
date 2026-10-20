@@ -83,6 +83,14 @@ def tool_summary(b):
     return name
 
 
+SYSTEM_MARKERS = ('<task-notification>', '[SYSTEM NOTIFICATION', '<system-reminder>')
+
+
+def is_system(text):
+    """Claude Code injects background-task notices as user-role messages; they are not human turns."""
+    return any(m in text[:200] for m in SYSTEM_MARKERS)
+
+
 def turns(transcript, red):
     seen_user = set()
     records = []
@@ -93,7 +101,7 @@ def turns(transcript, red):
         if not ts: continue
         if t == 'queue-operation' and e.get('operation') == 'enqueue':
             text = str(e.get('content') or '').strip()
-            if text and text not in seen_user:
+            if text and not is_system(text) and text not in seen_user:
                 seen_user.add(text); records.append({'m': 'u', 't': red(text), 'ts': ts})
         elif t == 'user' and not e.get('isMeta'):
             c = (e.get('message') or {}).get('content')
@@ -104,7 +112,7 @@ def turns(transcript, red):
             if cmd: records.append({'m': 'u', 't': cmd.group(1).strip(), 'ts': ts})
             elif out and records and records[-1]['m'] == 'u' and records[-1]['t'].startswith('/'):
                 records[-1]['t'] += f' ({red(out.group(1).strip())})'
-            elif text and text not in seen_user:
+            elif text and not is_system(text) and text not in seen_user:
                 seen_user.add(text); records.append({'m': 'u', 't': red(text), 'ts': ts})
         elif t == 'assistant':
             for b in (e.get('message') or {}).get('content') or []:
