@@ -1,8 +1,6 @@
-create a github repo for {insert your great idea}, to work on https://masky.ai/hackathon.md
-
 agent name: hermen
 
-<definition of hermeneutics>
+<add layperson definition of hermeneutics>
 example: i might say something in my vulnerable state and the therapist misinterprets it, if we're both unaware, as is the case most times, this is not good.
 
 while talking to an LLM directly for therapy may not be the best idea, preparing with an LLM prior to talking a real therapist is.

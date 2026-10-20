@@ -1,0 +1,7 @@
+#!/bin/sh
+# Prints the masky MCP auth header for Claude Code (.mcp.json headersHelper).
+# Uses $MASKY_API_KEY (set by mise) or falls back to reading cloudflare.env.
+dir=$(cd "$(dirname "$0")/.." && pwd)
+key=${MASKY_API_KEY:-$(sed -n 's/^masky_api_key=//p' "$dir/cloudflare.env" | tr -d '[:space:]')}
+[ -n "$key" ] || { echo "masky_api_key missing from $dir/cloudflare.env" >&2; exit 1; }
+printf '{"Authorization": "Bearer %s"}\n' "$key"

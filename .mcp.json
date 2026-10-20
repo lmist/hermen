@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "masky": {
+      "type": "http",
+      "url": "https://masky.ai/api/mcp",
+      "headersHelper": "./bin/masky-mcp-headers"
+    }
+  }
+}
