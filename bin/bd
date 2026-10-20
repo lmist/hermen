@@ -1,0 +1,4 @@
+#!/bin/sh
+# Repo-local bd: runs the version pinned in mise.toml, never a global bd.
+root=$(cd "$(dirname "$0")/.." && pwd)
+exec mise exec -C "$root" -- bd "$@"

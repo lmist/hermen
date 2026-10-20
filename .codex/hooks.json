@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Loading Beads context",
+            "command": "bash -c 'exec \"$(git rev-parse --show-toplevel)/bin/bd\" codex-hook SessionStart'"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Checking Beads context",
+            "command": "bash -c 'exec \"$(git rev-parse --show-toplevel)/bin/bd\" codex-hook PreCompact'"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Scheduling Beads context refresh",
+            "command": "bash -c 'exec \"$(git rev-parse --show-toplevel)/bin/bd\" codex-hook PostCompact'"
+          }
+        ]
+      }
+    ]
+  }
+}
