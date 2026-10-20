@@ -5,10 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Everybody pushes to main: only the newest push deploys.
+# Everybody pushes to main. Never cancel a running deploy (a busy swarm would starve
+# production); GitHub keeps only the newest pending run, so the latest push always ships.
 concurrency:
   group: deploy-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
