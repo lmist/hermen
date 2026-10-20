@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { PERSONAS, WANT_LABELS, isPersonaId } from '#/lib/hermen'
 import type { Intake, PersonaId } from '#/lib/hermen'
@@ -33,7 +33,13 @@ function usePrepPage(persona: PersonaId) {
   const summary = intake
     ? [intake.sessionWhen && `Session: ${intake.sessionWhen}`, intake.want && WANT_LABELS[intake.want]].filter(Boolean).join(' · ')
     : ''
-  return { persona: PERSONAS[persona], intake, start, summary }
+  // Probe (hermen-wgg.16): voice controls render after hydration only.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+  return { persona: PERSONAS[persona], intake, start, summary, hydrated }
 }
 
 function PrepPage() {
@@ -55,7 +61,7 @@ function PrepFlow({ persona }: { persona: PersonaId }) {
             <p className="os-meta m-0 truncate">{page.summary || p.tagline}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <VoiceToggle persona={persona} />
+            {page.hydrated ? <VoiceToggle persona={persona} /> : null}
             <Link
               to="/"
               className="os-pill text-[12px] no-underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
@@ -64,7 +70,7 @@ function PrepFlow({ persona }: { persona: PersonaId }) {
             </Link>
           </div>
         </div>
-        <VoiceNotes persona={persona} />
+        {page.hydrated ? <VoiceNotes persona={persona} /> : null}
       </div>
 
       {page.intake ? (
