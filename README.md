@@ -14,11 +14,13 @@ Hermen helps you get ready for a therapy session. You talk it through first, in 
 
 ## How it works
 
-1. **Pick your guide.** Hermen or Herma. Sign in with Masky as an avatar. No real name, no email.
+1. **Pick your guide.** Hermen or Herma. No account needed to start; sign in with Masky (as an avatar, no real name or email) to save cards or use voice.
 2. **Say it messy.** Hermen asks one gentle question at a time. No rush, no judgment.
 3. **"Here's what I heard."** Hermen reflects back what it understood, then flags words that could be read two ways. You correct it.
 4. **Say it three ways.** For the hardest thing, Hermen helps you write a plain version, a gentle version, and a version with an example.
 5. **Take your prep card.** One page: what you most want your therapist to understand, the hardest thing three ways, words that might be misread, what you want from the session, and a check-back question: *"Can you tell me what you heard?"*
+
+**Voice mode (optional):** turn on voice and Hermen or Herma read each reply aloud in their own Masky voice, and you can speak instead of type (browser speech recognition). Voice needs Masky sign-in.
 
 ## Safety
 
@@ -30,6 +32,7 @@ Hermen helps you get ready for a therapy session. You talk it through first, in 
   - Or your local emergency number.
 - Chats are never stored. They live in your browser tab and are gone when you close it.
 - Only the prep card is saved, and only if you choose to save it. You can delete it at any time.
+- Voice is opt-in. When it's on, the guide's replies are sent to Masky to make the audio, and the mic uses your browser's speech recognition.
 
 ## Built with
 

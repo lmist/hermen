@@ -78,6 +78,11 @@ answer. Preparing with an AI *before* real therapy is.
    - What I want from this session (vent / advice / a plan / just be heard)
    - A check-back question for the therapist: *"Can you tell me what you heard?"*
 
+**Talk out loud (optional).** Turn on voice and Hermen or Herma read each reply aloud in
+their own Masky voice, and you can speak instead of type. Saying things out loud is
+the best rehearsal for the room. Voice needs Masky sign-in, because each spoken line
+uses Masky credits.
+
 ## Meet Hermen and Herma
 
 Same brain, same rules, different face and voice. You pick who you would rather
@@ -115,6 +120,8 @@ Each one greets you with a short talking video on the landing page (made with Ma
   before your session. Only the card is saved (never the chat), under your Masky
   avatar, and you can delete it anytime.
 - You sign in as a Masky avatar, so we never learn your real name or email.
+- **Voice is opt-in.** When it's on, the guide's replies go to Masky to make the audio,
+  and the mic uses your browser's speech recognition.
 
 ## Why this fits the judging
 
@@ -139,10 +146,8 @@ Each one greets you with a short talking video on the landing page (made with Ma
 
 ## Not in v1 (cut for time)
 
-Saved history, accounts beyond sign-in, therapist-side features, voice input,
-booking, other languages, mobile app.
-Stretch, only if time remains: Hermen/Herma **read your card aloud** (Masky voice),
-and a **tip button** (Masky credits).
+Saved chat history, therapist-side features, booking, other languages, mobile app.
+Next: an after-session check-in ("did they hear you?"), and a **tip button** (Masky credits).
 
 ## Decisions for you (one word each)
 
